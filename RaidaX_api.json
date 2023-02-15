@@ -1,0 +1,2846 @@
+{
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "z8ghqs370d4of"
+  },
+  "info": {
+    "title": "SuperRAIDA Client API",
+    "version": "1.0",
+    "description": "SuperRAIDA Client Backend API",
+    "contact": {
+      "name": "RaidaTech",
+      "url": "raida.tech",
+      "email": "support@cloudcoin.global"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8888/api/v1",
+      "description": "API v1"
+    }
+  ],
+  "paths": {
+    "/wallets": {
+      "get": {
+        "summary": "Get Wallets",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/WalletsResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example2": {
+                    "value": {
+                      "status": "success",
+                      "payload": [
+                        {
+                          "name": "my wallet",
+                          "balance": 120,
+                          "denominations": {
+                            "1": 0,
+                            "5": 4,
+                            "25": 0,
+                            "100": 1,
+                            "250": 0
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "example-2": {
+                    "value": {
+                      "status": "success",
+                      "payload": [
+                        {
+                          "name": "string",
+                          "balance": 120,
+                          "denominations": {
+                            "1": 0,
+                            "5": 4,
+                            "25": 0,
+                            "100": 1,
+                            "250": 0
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "operationId": "get-wallets",
+        "description": "Gets a list of user's local wallets. "
+      },
+      "post": {
+        "summary": "Create a Wallet",
+        "operationId": "post-wallets",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "error",
+                      "payload": {
+                        "code": 4121,
+                        "message": "Validation error. name: cannot be blank.",
+                        "details": {}
+                      }
+                    }
+                  },
+                  "example-2": {
+                    "value": {
+                      "status": "success",
+                      "payload": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Creates a wallet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWalletRequest"
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/wallets/{name}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "name",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "GET local wallet info",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/WalletResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "error",
+                      "payload": {
+                        "code": 4115,
+                        "message": "Wallet not found",
+                        "details": {}
+                      }
+                    }
+                  },
+                  "example-2": {
+                    "value": {
+                      "status": "success",
+                      "payload": {
+                        "name": "my wallet",
+                        "balance": 110,
+                        "denominations": {
+                          "1": 0,
+                          "5": 2,
+                          "25": 0,
+                          "100": 1,
+                          "250": 0
+                        }
+                      },
+                      "contents": [
+                        100,
+                        200
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-wallets-name",
+        "parameters": [
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "name": "contents",
+            "description": "If true the contents of the wallet will be returned"
+          }
+        ],
+        "description": "Returns local wallet contents"
+      },
+      "delete": {
+        "summary": "Delete a Wallet",
+        "operationId": "delete-wallets-name",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SuccessResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "Deletes wallet",
+        "tags": [
+          "API"
+        ]
+      },
+      "put": {
+        "summary": "Renames a local wallet",
+        "operationId": "put-wallets-name",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SuccessResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "Renames a local wallet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWalletRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "new_name": "mynewwallet"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/echo": {
+      "get": {
+        "summary": "Echo RAIDA",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "payload": {
+                        "id": "79a70adc-8e55-4c3d-b54b-39b10d8ee998",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665547755,
+                        "finished": 1665547756,
+                        "message": "Command Completed",
+                        "data": {
+                          "online": 25,
+                          "pownstring": "ppppppppppppppppppppppppp",
+                          "pownarray": [
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1,
+                            1
+                          ],
+                          "latencies": [
+                            409,
+                            263,
+                            384,
+                            415,
+                            127,
+                            225,
+                            406,
+                            127,
+                            260,
+                            261,
+                            343,
+                            201,
+                            385,
+                            517,
+                            207,
+                            559,
+                            405,
+                            254,
+                            391,
+                            234,
+                            204,
+                            309,
+                            334,
+                            572,
+                            511
+                          ]
+                        }
+                      },
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-echo",
+        "description": "Echoes the SuperRAIDA"
+      }
+    },
+    "/pown": {
+      "post": {
+        "summary": "Pown Coins",
+        "operationId": "post-pown",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "payload": {
+                        "id": "0ad48651-3cf0-4922-8729-094b0e01aff4",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665548047,
+                        "finished": 1665548057,
+                        "message": "Command Completed",
+                        "data": {
+                          "total": 2,
+                          "authentic": 0,
+                          "fracked": 0,
+                          "limbo": 0,
+                          "counterfeit": 2,
+                          "unknown": 0,
+                          "wrong_type": 0,
+                          "already_exists": 0,
+                          "coins": [
+                            {
+                              "sn": 55,
+                              "pownstring": "ffuffffffffffffffffffffff",
+                              "result": "Counterfeit"
+                            },
+                            {
+                              "sn": 56,
+                              "pownstring": "ffuffffffffffffffffffffff",
+                              "result": "Counterfeit"
+                            }
+                          ],
+                          "tickets": [
+                            [
+                              "0f545941",
+                              "",
+                              "",
+                              "2e545a2f",
+                              "0f0bccda",
+                              "225c4672",
+                              "0943ccbf",
+                              "4252337a",
+                              "3ad8ee7a",
+                              "61d43f60",
+                              "5bbd9a23",
+                              "3532e009",
+                              "4e0e8c86",
+                              "791246d5",
+                              "3a32253a",
+                              "31d1c66d",
+                              "2dc9220f",
+                              "4c7c04a7",
+                              "751e58f5",
+                              "1c359c93",
+                              "6dd616ba",
+                              "0f2b9007",
+                              "56a66211",
+                              "53486493",
+                              "744af2a1"
+                            ]
+                          ],
+                          "details": []
+                        }
+                      },
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Powns coins (Changes authenticity numbers)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PownRequest"
+              },
+              "examples": {
+                "Request": {
+                  "value": {
+                    "coins": [
+                      {
+                        "sn": 55,
+                        "ans": [
+                          "6de9439834c9147569741d3c9c9fc010",
+                          "80000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000"
+                        ],
+                        "pans": [
+                          "00000000000000000000000000000000",
+                          "90000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000"
+                        ]
+                      },
+                      {
+                        "sn": 56,
+                        "ans": [
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000"
+                        ],
+                        "pans": [
+                          "00000000000000000000000000000000",
+                          "70000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000",
+                          "00000000000000000000000000000000"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/import": {
+      "post": {
+        "summary": "Imports coins",
+        "operationId": "post-import",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "payload": {
+                        "id": "94cfb07c-9d37-4ece-b91e-f52d664f5cd1",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665548874,
+                        "finished": 1665548876,
+                        "message": "Command Completed",
+                        "data": {
+                          "pown_results": {
+                            "total": 2,
+                            "authentic": 0,
+                            "fracked": 0,
+                            "limbo": 0,
+                            "counterfeit": 2,
+                            "unknown": 0,
+                            "wrong_type": 0,
+                            "already_exists": 0,
+                            "coins": [
+                              {
+                                "sn": 4158040,
+                                "pownstring": "fffffffffffffffffffffffff",
+                                "result": "Counterfeit"
+                              },
+                              {
+                                "sn": 4158038,
+                                "pownstring": "fffffffff ffffffffffffffff",
+                                "result": "Counterfeit"
+                              }
+                            ],
+                            "tickets": [
+                              [
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                              ]
+                            ],
+                            "details": []
+                          },
+                          "receipt_id": "d0db3e751d391482a5b8fefed1b5ff05"
+                        }
+                      },
+                      "status": "succe ss"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Imports cloudcoins. Each cloudcoin stack can be a file or a base64-encoded string. Stack, CC and PNG formats are supported.",
+        "tags": [
+          "API"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "mywallet",
+                    "items": [
+                      {
+                        "type": "file",
+                        "data": "/home/alexander/dev/superraida/4.CloudCoin.rrr.bin"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get a task",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-tasks-id",
+        "description": "Returns task by ID. The payload of the task is also returned and the payload contents depend on the initial request that created the task",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "id",
+            "description": "Task ID",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/export": {
+      "post": {
+        "summary": "Export Coins",
+        "operationId": "post-export",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "payload": {
+                        "id": "61113d0a-407e-46cd-8056-e3dda4f0deb4",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665548520,
+                        "finished": 1665548521,
+                        "message": "Command Completed",
+                        "data": {}
+                      },
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Exports coins from a local wallet to a provided folder. ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "Default",
+                    "amount": 1,
+                    "tag": "yyy",
+                    "type": "png",
+                    "folder": "/home/alexander/ttt"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/transfer": {
+      "post": {
+        "summary": "Transfer coins",
+        "operationId": "post-transfer",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "payload": {
+                        "id": "61113d0a-407e-46cd-8056-e3dda4f0deb4",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665548520,
+                        "finished": 1665548521,
+                        "message": "Command Completed",
+                        "data": {}
+                      },
+                      "status": "success"
+                    }
+                  },
+                  "error": {
+                    "value": {
+                      "status": "error",
+                      "payload": {
+                        "code": 4311,
+                        "message": "Failed to transfer coins: No such wallet",
+                        "details": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Transfers coins from a local wallet to another local wallet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "srcname": "mysrcwallet",
+                    "dstname": "mydstwallet",
+                    "amount": 2,
+                    "tag": "mytag"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/info": {
+      "get": {
+        "summary": "Info about the CoinManager",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponse"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "success",
+                      "payload": {
+                        "version": "22.10.1"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-info",
+        "description": "Retrieves information about CloudCoin Manager"
+      }
+    },
+    "/news": {
+      "get": {
+        "summary": "News",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewsResponse"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "success",
+                      "payload": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-news",
+        "tags": [
+          "API"
+        ],
+        "description": "Gets news from the News Server. The CoinManager receives news from the server in jsonfeed format and sends it to the client"
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "Downloads user settings",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SettingsResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "error",
+                      "payload": {
+                        "code": 0,
+                        "message": "string",
+                        "details": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-settings",
+        "description": "Fetches user's settings"
+      },
+      "post": {
+        "summary": "Modify User settings",
+        "operationId": "post-settings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SuccessResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Settings"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "default_timeout_mult": 1,
+                    "echo_timeout_mult": 2,
+                    "max_notes": 1000,
+                    "change_server_sn": 0,
+                    "use_local_raidas": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Updates user's settings",
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/health": {
+      "post": {
+        "summary": "Health Check",
+        "operationId": "post-health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "payload": {
+                        "id": "6e0eda69-32b5-43a8-85f7-dcf622b859f7",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665549849,
+                        "finished": 1665549850,
+                        "message": "Command Completed",
+                        "data": {
+                          "TotalCoins": 2,
+                          "TotalCheckedCoins": 2,
+                          "TotalAuthentic": 2,
+                          "TotalAlreadyFracked": 0,
+                          "TotalAlreadyLimbo": 0,
+                          "TotalFracked": 0,
+                          "TotalCounterfeit": 0,
+                          "TotalLimbo": 0,
+                          "TotalErrors": 0,
+                          "Details": null,
+                          "Coins": [
+                            {
+                              "sn": 16773436,
+                              "pownstring": "ppppppppppppppppppppppppp",
+                              "result": "Authentic"
+                            },
+                            {
+                              "sn": 16773437,
+                              "pownstring": "ppppppppppppppppppppppppp",
+                              "result": "Authentic"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Runs a Health Check over a Local Wallet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HealthCheckRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "mywallet"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/fix": {
+      "post": {
+        "summary": "Fix Coins",
+        "operationId": "post-fix",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "payload": {
+                        "id": "46abdca1-5ea6-4d17-a118-89b30c8bd9fa",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665549973,
+                        "finished": 1665549973,
+                        "message": "Command Completed",
+                        "data": {
+                          "total_fixed": 0,
+                          "total_errors": 0,
+                          "total_skipped": 2,
+                          "total_fixes_made": 0,
+                          "total_fixes_failed": 0
+                        }
+                      },
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Fixes specific coins after Import or Pown",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FixRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "string",
+                    "pownitems": [
+                      {
+                        "sn": 101,
+                        "pownstring": "ppppfppppppppppppfppppfpp"
+                      }
+                    ],
+                    "tickets": [
+                      [
+                        "0f545941",
+                        "",
+                        "",
+                        "2e545a2f",
+                        "0f0bccda",
+                        "225c4672",
+                        "0943ccbf",
+                        "4252337a",
+                        "3ad8ee7a",
+                        "61d43f60",
+                        "5bbd9a23",
+                        "3532e009",
+                        "4e0e8c86",
+                        "791246d5",
+                        "3a32253a",
+                        "31d1c66d",
+                        "2dc9220f",
+                        "4c7c04a7",
+                        "751e58f5",
+                        "1c359c93",
+                        "6dd616ba",
+                        "0f2b9007",
+                        "56a66211",
+                        "53486493",
+                        "744af2a1"
+                      ]
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      },
+      "put": {
+        "summary": "Fix All Coins",
+        "operationId": "put-fix",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "payload": {
+                        "id": "46abdca1-5ea6-4d17-a118-89b30c8bd9fa",
+                        "status": "completed",
+                        "progress": 100,
+                        "started": 1665549973,
+                        "finished": 1665549973,
+                        "message": "Command Completed",
+                        "data": {
+                          "total_fixed": 0,
+                          "total_errors": 0,
+                          "total_skipped": 2,
+                          "total_fixes_made": 0,
+                          "total_fixes_failed": 0
+                        }
+                      },
+                      "status": "success"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Fixes all coins in the fracked folder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FixPutRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "mywallet"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/backup": {
+      "post": {
+        "summary": "Backup local wallet",
+        "operationId": "post-backup",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "Backups a local wallet to a folder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BackupRequest"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "mywallet",
+                    "folder": "/mnt/backup",
+                    "tag": "mybackup"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/transactions/{name}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "name",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "delete": {
+        "summary": "Deletes transactions",
+        "operationId": "delete-transactions-name",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SuccessResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "Deletes all transactions in the wallet",
+        "tags": [
+          "API"
+        ]
+      },
+      "get": {
+        "summary": "List of local transactions",
+        "operationId": "get-transactions-name",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetTransactionsResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ],
+        "description": "Shows the transaction list"
+      }
+    },
+    "/transactions/{name}/{guid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "name",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "guid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get Receipt",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetTransactionResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "status": "error",
+                      "payload": {
+                        "code": 0,
+                        "message": "string",
+                        "details": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-transactions-name-guid",
+        "description": "Receives transaction details (receipt). You need to know the GUID of the receipt"
+      }
+    },
+    "/filepicker": {
+      "get": {
+        "summary": "Filepicker",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FilePickerResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-filepicker",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "type",
+            "description": "\"file\" or \"folder\""
+          }
+        ],
+        "description": "Invokes a native file picker"
+      }
+    },
+    "/wallets/{name}/leftovers": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "name",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Leftovers",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/WalletResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-wallets-name-leftovers",
+        "description": "Checks if there are coins in the Suspect Folder"
+      }
+    },
+    "/convert": {
+      "post": {
+        "summary": "Convert CloudCoins",
+        "operationId": "post-convert",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TaskResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "Converts legacy CloudCoins to the new format. The method signature is similar to 'import'",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertRequest"
+              }
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "title": "ErrorResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "error"
+            ]
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ErrorPayload"
+          }
+        },
+        "required": [
+          "status",
+          "payload"
+        ],
+        "x-examples": {
+          "example-1": {
+            "status": "error",
+            "payload": {
+              "code": 4115,
+              "message": "Wallet not found",
+              "details": null
+            }
+          }
+        }
+      },
+      "ErrorPayload": {
+        "title": "ErrorPayload",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error Code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error Text Description"
+          },
+          "details": {
+            "type": "object",
+            "description": "Error Details. May vary depending on the error"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "Wallet": {
+        "title": "Wallet",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "balance": {
+            "type": "integer"
+          },
+          "denominations": {
+            "type": "object",
+            "properties": {
+              "1": {
+                "type": "integer"
+              },
+              "5": {
+                "type": "integer"
+              },
+              "25": {
+                "type": "integer"
+              },
+              "100": {
+                "type": "integer"
+              },
+              "250": {
+                "type": "integer"
+              }
+            }
+          },
+          "contents": {
+            "type": "array",
+            "description": "Array of the serial numbers. May be empty",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          },
+          "email": {
+            "type": "string"
+          },
+          "password_hash": {
+            "type": "string"
+          }
+        }
+      },
+      "WalletsResponse": {
+        "title": "WalletsResponse",
+        "type": "object",
+        "x-examples": [
+          {
+            "status": "success",
+            "payload": [
+              {
+                "name": "string",
+                "balance": 120,
+                "denominations": {
+                  "1": 0,
+                  "5": 4,
+                  "25": 0,
+                  "100": 1,
+                  "250": 0
+                }
+              }
+            ]
+          }
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Wallet"
+            }
+          }
+        }
+      },
+      "CreateWalletRequest": {
+        "title": "CreateWalletRequest",
+        "type": "object",
+        "x-examples": [
+          {
+            "name": "My Wallet"
+          }
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Wallet name"
+          },
+          "email": {
+            "type": "string",
+            "description": "Recovery Email"
+          },
+          "password": {
+            "type": "string",
+            "description": "Encryption password"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "title": "SuccessResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      },
+      "WalletResponse": {
+        "title": "WalletResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "$ref": "#/components/schemas/Wallet"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "x-examples": [
+          {
+            "status": "success",
+            "payload": {
+              "name": "my wallet",
+              "balance": 110,
+              "denominations": {
+                "1": 0,
+                "5": 2,
+                "25": 0,
+                "100": 1,
+                "250": 0
+              }
+            }
+          }
+        ]
+      },
+      "TaskResponse": {
+        "title": "TaskResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "$ref": "#/components/schemas/Task"
+          }
+        },
+        "required": [
+          "status",
+          "payload"
+        ],
+        "x-examples": [
+          {
+            "status": "success",
+            "payload": {
+              "id": "5661393a-3ca2-4397-9c5e-fe097b1285cc",
+              "status": "running",
+              "progress": 0,
+              "started": 1632039043,
+              "finished": 0,
+              "data": {}
+            }
+          }
+        ]
+      },
+      "Task": {
+        "title": "Task",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Task UUID"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "completed"
+            ]
+          },
+          "progress": {
+            "type": "number"
+          },
+          "started": {
+            "type": "integer",
+            "description": "Timestamp"
+          },
+          "finished": {
+            "type": "integer",
+            "description": "Timestamp"
+          },
+          "data": {
+            "description": "When task finishes this field is populated depending of the task contents",
+            "oneOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "array",
+                "items": {}
+              }
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "progress",
+          "started",
+          "finished",
+          "data"
+        ]
+      },
+      "EchoTaskResponse": {
+        "title": "EchoTaskResponse",
+        "type": "object",
+        "x-examples": [
+          {
+            "online": 24,
+            "pownstring": "epppppppppppppppppppppppp",
+            "pownarray": [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          }
+        ],
+        "properties": {
+          "online": {
+            "type": "integer",
+            "description": "Number of online servers"
+          },
+          "pownstring": {
+            "type": "string",
+            "description": "25 characters, e - error, p - pass, f - fail, n - network error"
+          },
+          "pownarray": {
+            "type": "array",
+            "description": "the same as pownstring but contains numbers instead of characters",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "latencies": {
+            "type": "array",
+            "description": "latencies in ms",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "online",
+          "pownstring",
+          "pownarray",
+          "latencies"
+        ]
+      },
+      "CoinPown": {
+        "title": "CoinPown",
+        "type": "object",
+        "x-examples": [
+          {
+            "sn": 10,
+            "ans": [
+              "6de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010"
+            ],
+            "pans": [
+              "6de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010",
+              "1de9439834c9147569741d3c9c9fc010"
+            ]
+          }
+        ],
+        "properties": {
+          "sn": {
+            "type": "integer",
+            "description": "Serial Number"
+          },
+          "ans": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pans": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "sn",
+          "ans",
+          "pans"
+        ]
+      },
+      "DetectTaskResponse": {
+        "title": "DetectTaskResponse",
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "authentic": {
+            "type": "integer"
+          },
+          "fracked": {
+            "type": "integer"
+          },
+          "limbo": {
+            "type": "integer"
+          },
+          "unknown": {
+            "type": "integer"
+          },
+          "coins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetectCoinResult"
+            }
+          }
+        }
+      },
+      "PownTaskResponse": {
+        "title": "PownTaskResponse",
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "authentic": {
+            "type": "integer"
+          },
+          "fracked": {
+            "type": "integer"
+          },
+          "limbo": {
+            "type": "integer"
+          },
+          "unknown": {
+            "type": "integer"
+          },
+          "coins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetectCoinResult"
+            }
+          },
+          "tickets": {
+            "type": "array",
+            "description": "Array of array of tickets. Each item is a batch array of 25 tickets",
+            "items": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "details": {
+            "type": "array",
+            "description": "Array of errors. Each batch is an array of 25 errors from raida servers. If an error occured during the POWN operation this value will hold the errors description from 25 raida servers for each batch",
+            "items": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        },
+        "required": [
+          "total",
+          "authentic",
+          "fracked",
+          "limbo",
+          "unknown",
+          "coins",
+          "tickets",
+          "details"
+        ]
+      },
+      "DetectCoinResult": {
+        "title": "DetectCoinResponse",
+        "type": "object",
+        "properties": {
+          "sn": {
+            "type": "integer"
+          },
+          "pownstring": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "Counterfeit",
+              "Authentic",
+              "Fracked",
+              "Limbo"
+            ]
+          }
+        },
+        "required": [
+          "sn",
+          "pownstring",
+          "result"
+        ]
+      },
+      "PownRequest": {
+        "title": "PownRequest",
+        "type": "object",
+        "properties": {
+          "coins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CoinPown"
+            }
+          }
+        },
+        "x-examples": [
+          {
+            "coins": [
+              {
+                "sn": 10,
+                "ans": [
+                  "6de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010"
+                ],
+                "pans": [
+                  "6de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010",
+                  "1de9439834c9147569741d3c9c9fc010"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "ImportRequest": {
+        "title": "ImportRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Wallet name"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportItem"
+            }
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "items"
+        ]
+      },
+      "ConvertRequest": {
+        "title": "ConvertRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Wallet name"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportItem"
+            }
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "items",
+          "email"
+        ]
+      },
+      "ImportItem": {
+        "title": "ImportItem",
+        "type": "object",
+        "x-examples": [
+          {
+            "type": "file",
+            "data": "/home/alexander/800.CloudCoin.rn.stack"
+          },
+          {
+            "type": "inline",
+            "data": "AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAABDmN3SubxKUDprNwgpQgRCToxhBD7r5A8UV8M7JZ4O5/usYPsNwbzklb7jhsQ/xV3Jv83yffj5aKWJF0b7xd1b4Kjcd0KjFpH0rYUyCPsziGekNirP4YpQgjO2r/wIktscU0OubUABvnMQSMTQ/ZUElk+YbPweixC05P53lvM53ebM+mXe5G+VaJ3Bcs6Ac70TfCMQpYowtxGAJNLasuFL6QULNAQRBTfjfZxud2oQ5oA3SU4BsvMzVvLF+A5cr6waBufVWTJ1rkVSOs0oJTCZZoiSJnO4cXOIO8gjh2P+kQhisje6M7GLYuaTyztMzMY2IFuquYyDyrfIAHXLnv0Q/SXRQ4IVdK3nmCCyR5kOtqyW+S7xv/LsufAYu2ED16ipij2KSkqP/Iv8OIACAk2TsRvTVDudGHHUt2a8z4l47ynIaadC/duM0uhHgr4JkLB9ZLy1N0EXpQW1x10gJdZt9mRfmoBHTv6gV/9N2fSuqdlSL3FJjHbzLnAOnVBX6GBo/Yn24LVDL4gOcglDLT2X"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "inline",
+              "file"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "description": "base64 data or full file path"
+          }
+        },
+        "required": [
+          "type",
+          "data"
+        ]
+      },
+      "TransferTaskResponse": {
+        "title": "TransferTaskResponse",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "description": "Base64-encoded PNG file with coins inside"
+          }
+        },
+        "required": [
+          "amount"
+        ],
+        "x-examples": {
+          "example-1": {
+            "amount": 5
+          }
+        }
+      },
+      "ExportRequest": {
+        "title": "ExportRequest",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "name": "my wallet",
+            "amount": 10,
+            "tag": "From John",
+            "type": "png"
+          }
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Wallet name"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "tag": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "Export type. Either png or zip",
+            "enum": [
+              "png",
+              "zip"
+            ]
+          },
+          "folder": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "amount",
+          "tag",
+          "folder"
+        ]
+      },
+      "Transaction": {
+        "title": "Transaction",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "datetime": {
+            "type": "integer"
+          },
+          "receiptid": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "TransferRequest": {
+        "title": "TransferRequest",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "srcname": "wallet1",
+            "dstname": "wallet2",
+            "amount": 10,
+            "tag": "my transfer"
+          }
+        },
+        "properties": {
+          "srcname": {
+            "type": "string"
+          },
+          "dstname": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "srcname",
+          "dstname",
+          "amount",
+          "tag"
+        ]
+      },
+      "InfoResponse": {
+        "title": "InfoResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "$ref": "#/components/schemas/Info"
+          }
+        }
+      },
+      "Info": {
+        "title": "Info",
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "NewsResponse": {
+        "title": "NewsResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "$ref": "#/components/schemas/NewsResponse"
+          }
+        }
+      },
+      "News": {
+        "title": "News",
+        "type": "object",
+        "description": "JSON Feed v1",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewsItem"
+            }
+          }
+        }
+      },
+      "NewsItem": {
+        "title": "NewsItem",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content_html": {
+            "type": "string"
+          },
+          "content_text": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "date_published": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/NewsAuthor"
+          }
+        },
+        "description": "JSON Feed v1"
+      },
+      "NewsAuthor": {
+        "title": "NewsAuthor",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        }
+      },
+      "Settings": {
+        "title": "SettingsResponse",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "default_timeout_mult": 100,
+            "echo_timeout_mult": 50,
+            "max_notes": 100
+          }
+        },
+        "properties": {
+          "default_timeout_mult": {
+            "type": "integer",
+            "description": "Timeout multiplier for all services"
+          },
+          "echo_timeout_mult": {
+            "type": "integer",
+            "description": "Timeout multiplier for echo"
+          },
+          "max_notes": {
+            "type": "integer",
+            "description": "Maximum notes to send at a time"
+          },
+          "change_server_sn": {
+            "type": "integer"
+          },
+          "local_raidas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "use_local_raidas": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SettingsResponse": {
+        "title": "SettingsResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "payload": {
+            "$ref": "#/components/schemas/Settings"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "x-examples": {
+          "example-1": {
+            "status": "success",
+            "payload": {
+              "default_timeout_mult": 20,
+              "echo_timeout_mult": 10,
+              "max_notes": 100
+            }
+          }
+        }
+      },
+      "HealthCheckRequest": {
+        "title": "HealthCheckRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "PownItem": {
+        "title": "PownItem",
+        "type": "object",
+        "properties": {
+          "sn": {
+            "type": "integer"
+          },
+          "pownstring": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sn",
+          "pownstring"
+        ],
+        "x-examples": {
+          "example-1": {
+            "sn": 10,
+            "pownstring": "pppfppppppppppppppppfpppp"
+          }
+        }
+      },
+      "FixRequest": {
+        "title": "FixRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "pownitems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PownItem"
+            }
+          },
+          "tickets": {
+            "type": "array",
+            "description": "Array of tickets batches returned by Pown or Detect",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "pownitems"
+        ]
+      },
+      "FixPutRequest": {
+        "title": "FixPutRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteStatementsRequest": {
+        "title": "DeleteStatementsRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "description": "Deletes all statements"
+      },
+      "BackupRequest": {
+        "title": "BackupRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "folder": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "folder",
+          "tag"
+        ]
+      },
+      "GetTransactionRequest": {
+        "title": "GetTransactionRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "guid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "guid"
+        ]
+      },
+      "GetTransactionResponse": {
+        "title": "GetTransactionResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/TransactionDetail"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "TransactionDetail": {
+        "title": "TransactionDetail",
+        "type": "object",
+        "properties": {
+          "sn": {
+            "type": "integer"
+          },
+          "denomination": {
+            "type": "integer"
+          },
+          "pownstring": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteTransactionsRequest": {
+        "title": "DeleteTransactionsRequest",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UpdateWalletRequest": {
+        "title": "UpdateWalletRequest",
+        "type": "object",
+        "properties": {
+          "new_name": {
+            "type": "string"
+          }
+        }
+      },
+      "FilePickerResponse": {
+        "title": "FilePickerResponse",
+        "type": "object",
+        "properties": {
+          "items_picked": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GetTransactionsResponse": {
+        "title": "GetTransactionsResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          }
+        }
+      },
+      "ImportTaskResponse": {
+        "title": "ImportTaskResponse",
+        "type": "object",
+        "properties": {
+          "receipt_id": {
+            "type": "string"
+          },
+          "pown_result": {
+            "$ref": "#/components/schemas/PownTaskResponse"
+          }
+        }
+      },
+      "BackupTaskResponse": {
+        "title": "BackupTaskResponse",
+        "type": "object",
+        "properties": {
+          "total_coins": {
+            "type": "number"
+          },
+          "file_name": {
+            "type": "string"
+          }
+        }
+      },
+      "ConvertTaskResponse": {
+        "title": "ConvertTaskResponse",
+        "x-stoplight": {
+          "id": "fmfegu2gkq45u"
+        },
+        "type": "object",
+        "properties": {
+          "total_coins": {
+            "type": "string"
+          },
+          "total_converted": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "receipt_id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "API"
+    }
+  ]
+}
